@@ -1,0 +1,48 @@
+# Configuration Apache + PHP 7
+web:
+  restart: always
+  build: php-apache
+  ports:
+    - "80:80"
+  volumes:
+    - /Users/adrien/Sites/Lab:/var/www
+  environment:
+    - ALLOW_OVERRIDE=true
+  links:
+    - db:db
+    - maildev:maildev
+
+# Configuration Nginx + PHP 7
+# web:
+#   restart: always
+#   image: nginx
+#   ports:
+#     - "80:80"
+#   volumes:
+#     - /Users/adrien/Sites/docker-php/nginx:/etc/nginx/conf.d
+#     - /Users/adrien/Sites/Lab:/var/www
+#   links:
+#     - php:php
+# php:
+#   build: php
+#   restart: always
+#   volumes:
+#     - /Users/adrien/Sites/Lab:/var/www
+#     - /Users/adrien/Sites/docker-php/php.ini:/usr/local/etc/php/php.ini
+#   links:
+#     - db:db
+#     - maildev:maildev
+
+db:
+  image: mysql
+  restart: always
+  volumes:
+    - /var/lib/boot2docker/mysql:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+
+maildev:
+  restart: always
+  image: djfarrelly/maildev
+  ports:
+    - "1080:80"
